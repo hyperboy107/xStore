@@ -1,0 +1,84 @@
+System Design Details
+1. Modules of the System
+Frontend:
+
+Built with React.js.
+Handles user interfaces for customers and admin (e.g., product listing, cart, checkout, and admin panel for CRUD operations).
+Uses Redux.js for state management to handle seamless API interactions.
+
+Backend:
+
+Built with Node.js and Express.js.
+API Gateway for routing user requests to appropriate microservices.
+Implements modular services:
+User Management Service: Handles user registration, authentication (JWT), and roles (admin vs. user).
+Product Service: CRUD operations for products.
+Order Service: Processes and tracks orders.
+Payment Service: Handles PayPal integration.
+Analytics Service: Provides real-time data visualizations using Apex Charts.
+
+Database:
+
+MongoDB: NoSQL database to handle unstructured data like user profiles, product details, and orders.
+Use of proper indexing for faster query execution.
+
+Payment Gateway:
+
+Integrated with PayPal API for secure online payments.
+
+Data Visualization:
+
+ApexCharts integrated into the admin panel for visualizing sales data, user activities, and performance metrics.
+Caching Layer:
+
+
+System Architecture Diagram
+Here’s the high-level system design:
+
+                       +---------------------------------------------+
+                       |                   Users                    |
+                       +---------------------------------------------+
+                                   |                  |
+                                   v                  v
+                        +----------------+    +----------------+
+                        |  Admin Panel   |    |  User Interface |
+                        +----------------+    +----------------+
+                                   |                  |
+                                   +------------------+
+                                              |
+                                              v
+                                    +-------------------+
+                                    |   API Gateway     |
+                                    +-------------------+
+                                              |
+     +--------------------+-------------------+--------------------+
+     |                    |                   |                    |
+     v                    v                   v                    v
++------------+    +----------------+    +----------------+    +----------------+
+|  Auth      |    | Product        |    | Order          |    | Payment        |
+| Service    |    | Service        |    | Service        |    | Service        |
++------------+    +----------------+    +----------------+    +----------------+
+     |                     |                    |                     |
+     v                     v                    v                     v
++----------------+  +----------------+  +----------------+  +----------------+
+| User DB        |  | Product DB     |  | Order DB       |  | Payment DB     |
+| (MongoDB)      |  | (MongoDB)      |  | (MongoDB)      |  | (MongoDB)      |
++----------------+  +----------------+  +----------------+  +----------------+
+                          |
+                          v
+                  +-------------------+
+                  | Caching Layer     |
+                  | (Redis)           |
+                  +-------------------+
+                          |
+                          v
+             +----------------------------+
+             | Message Queue (RabbitMQ)   |
+             +----------------------------+
+                          |
+                          v
+              +--------------------------+
+              | Logging/Monitoring Tools |
+              | (Prometheus/Grafana)     |
+              +--------------------------+
+
